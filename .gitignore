@@ -1,0 +1,16 @@
+.vscode
+.mypy*
+__pycache__
+*.fls*
+*.aux*
+*.fdb*
+*.log*
+*.out*
+*.run*
+*.bbl*
+*.blg*
+*-blx*
+*.bcf*
+*.synctex*
+_*/
+relatorio/*.pdf
