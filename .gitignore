@@ -1,6 +1,7 @@
 .vscode
 .mypy*
 __pycache__
+out.png
 *.fls*
 *.aux*
 *.fdb*
