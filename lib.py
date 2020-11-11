@@ -41,19 +41,18 @@ def varredura_unidirecional(img: Image, dist: ErrorDist) -> Image:
 
 
 @jit(uint8[:,:,::1](uint8[:,:,::1], float32[:,::1]), **jit_opt)
-def varredura_alternada(img: Image, dist_par: ErrorDist) -> Image:
+def varredura_alternada(img: Image, dist: ErrorDist) -> Image:
     H, W, _ = img.shape
 
-    tH, tW = dist_par.shape
+    tH, tW = dist.shape
     dH, dW = (tH - 1)//2, (tW - 1)//2
 
     img = img.astype(np.float32)
     res = np.zeros((H, W, 3), dtype=np.uint8)
 
-    dist_impar = np.copy(dist_par[:,::-1])
-
     for c in prange(3):
-        for x in range((H + 1)//2):
+        for xm in range((H + 1)//2):
+            x = 2 * xm
 
             for y in range(W):
                 intensidade = img[x, y, c]
@@ -70,32 +69,37 @@ def varredura_alternada(img: Image, dist_par: ErrorDist) -> Image:
                     for j in range(tW):
                         yj = y + j - dW
                         if 0 <= xi < H and 0 <= yj < W:
-                            img[xi, yj, c] += dist_par[i, j] * erro
+                            img[xi, yj, c] += dist[i, j] * erro
 
-            if x + 1 == H:
+            x += 1
+            if x == H:
                 break
 
-            for y in range(W-1, -1, -1):
-                intensidade = img[x + 1, y, c]
+            for ym in range(W):
+                y = W - 1 - ym
+                intensidade = img[x, y, c]
                 if intensidade < 128.0:
                     # res[x, y, c] = 0
                     valor = 0.0
                 else:
-                    res[x + 1, y, c] = 1
+                    res[x, y, c] = 1
                     valor = 255.0
 
                 erro = intensidade - valor
                 for i in range(tH):
-                    xi = x + 1 + i - dH
-                    for j in range(tW):
+                    xi = x + i - dH
+                    for jm in range(tW):
+                        j = tW - j
                         yj = y + j - dW
                         if 0 <= xi < H and 0 <= yj < W:
-                            img[xi, yj, c] += dist_impar[i, j] * erro
+                            img[xi, yj, c] += dist[i, j] * erro
     return res
 
 
 def meios_tons(img: Image, dist: ErrorDist, varredura='unidirecional') -> Image:
     if varredura == 'unidirecional':
         return varredura_unidirecional(img, dist)
+    elif varredura == 'alternada':
+        return varredura_alternada(img, dist)
     else:
         raise ValueError(f'tipo de varredura desconhecida: "{varredura}"')
