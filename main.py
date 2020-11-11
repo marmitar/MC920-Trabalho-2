@@ -25,7 +25,7 @@ if __name__ == "__main__":
         filename = 'imagens/lenna.png'
 
     img = cv2.imread(filename)
-    img = meios_tons(img, FLOYD)
+    img = 255 * meios_tons(img, FLOYD)
 
     cv2.imwrite('out.png', img)
     # cv2.imshow(filename, img)
