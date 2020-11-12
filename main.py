@@ -3,7 +3,7 @@ from typing import List
 
 import numpy as np
 import cv2
-from lib import meios_tons
+from lib import meios_tons, Varredura
 
 
 
@@ -20,13 +20,13 @@ FLOYD = distribuicao([
 if __name__ == "__main__":
     import sys
     if len(sys.argv) > 2:
-        varredura = sys.argv[2]
+        varredura = Varredura[sys.argv[2]]
         filename = sys.argv[1]
     elif len(sys.argv) > 1:
-        varredura = 'alternada'
+        varredura = Varredura.alternada
         filename = sys.argv[1]
     else:
-        varredura = 'alternada'
+        varredura = Varredura.alternada
         filename = 'imagens/lenna.png'
 
 

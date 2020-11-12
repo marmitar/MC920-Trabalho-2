@@ -1,4 +1,5 @@
 from tipos import Image, ErrorDist
+
 from .nb import jit
 import numpy as np
 
