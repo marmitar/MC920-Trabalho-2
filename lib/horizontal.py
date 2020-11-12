@@ -5,7 +5,7 @@ import numpy as np
 
 
 
-@jit()
+@jit("uint8[:,::1](uint8[:,::1], float32[:,::1])")
 def varredura_unidirecional(img: Image, dist: ErrorDist) -> Image:
     H, W = img.shape
 
@@ -35,7 +35,7 @@ def varredura_unidirecional(img: Image, dist: ErrorDist) -> Image:
     return res
 
 
-@jit()
+@jit("uint8[:,::1](uint8[:,::1], float32[:,::1])")
 def varredura_alternada(img: Image, dist: ErrorDist) -> Image:
     H, W = img.shape
 
