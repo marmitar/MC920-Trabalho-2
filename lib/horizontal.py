@@ -6,17 +6,41 @@ import numpy as np
 from .nb import jit
 
 
+# # # # # # # # #
+# Unidirecional #
 
 @jit("uint8[:,::1](uint8[:,::1], float32[:,::1])")
 def varredura_unidirecional(img: Image, dist: ErrorDist) -> Image:
+    """
+    Varredura unidirecional pela imagem, reduzindo os níveis de cinza
+    e redistribuindo os erros em relação a imagem original.
+
+    Parâmetros
+    ----------
+    img: np.ndarray
+        Matriz 2D com `uint8` em ordem row-major, representando a imagem.
+    dist: np.ndarray
+        Matriz 2D com `float32` em ordem row-major, representando a
+        distribuição de erros que deve ser feita.
+
+    Retorno
+    -------
+    out: np.ndarray
+        Imagem resultante. Matriz 2D com `uint8` em ordem row-major.
+    """
+    # dimensões da imagem
     H, W = img.shape
-
+    # dimensões da distribuição de erros
     tH, tW = dist.shape
-    dH, dW = (tH - 1)//2, (tW - 1)//2
+    # deslocamento em `x` do início da dist.
+    dW = (tW - 1) // 2
 
+    # imagem em ponto flutuante, para usar os erros
     img = img.astype(np.float32)
+    # imagem resultante
     res = np.empty((H, W), dtype=np.uint8)
 
+    # aplicação em cada pixel
     for y in range(H):
         for x in range(W):
             intensidade = img[y, x]
@@ -29,13 +53,16 @@ def varredura_unidirecional(img: Image, dist: ErrorDist) -> Image:
 
             erro = intensidade - valor
             for i in range(tH):
-                yi = y + i - dH
+                yi = y + i
                 for j in range(tW):
                     xj = x + j - dW
                     if 0 <= yi < H and 0 <= xj < W:
                         img[yi, xj] += dist[i, j] * erro
     return res
 
+
+# # # # # # #
+# Alternada #
 
 @jit("uint8[:,::1](uint8[:,::1], float32[:,::1])")
 def varredura_alternada(img: Image, dist: ErrorDist) -> Image:

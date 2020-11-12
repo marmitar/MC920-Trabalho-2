@@ -59,7 +59,7 @@ class Varredura(IntEnum):
 
 
 # # # # # # # # # # # # # # #
-# Aplicação dos meios-tons. #
+# Aplicação dos meios-tons  #
 
 def meios_tons(img: Image, dist: ErrorDist, varredura=Varredura) -> Image:
     """
@@ -72,7 +72,8 @@ def meios_tons(img: Image, dist: ErrorDist, varredura=Varredura) -> Image:
         Matriz de 2 (em escalas de cinza) ou 3 (com canais RGB) dimensões que
         representa a imagem.
     dist: np.ndarray
-        Matriz com as distribuições de erro a ser aplicada.
+        Matriz com as distribuições de erro à serem aplicadas. Assume largura
+        ímpar, iniciando a aplicação na posição intermediária da primeira linha.
     varredura: Varredura
         Ordem de aplicação na imagem.
 
@@ -98,7 +99,7 @@ def meios_tons_colorida(img: Image, dist: ErrorDist, varredura: int) -> Image:
     Parâmetros
     ----------
     img: np.ndarray
-        Matriz 3D dimensões com `uint8` em ordem row-major.
+        Matriz 3D com `uint8` em ordem row-major.
     dist: np.ndarray
         Matriz 2D com `float32` em ordem row-major.
     varredura: int
@@ -107,7 +108,7 @@ def meios_tons_colorida(img: Image, dist: ErrorDist, varredura: int) -> Image:
     Retorno
     -------
     out: np.ndarray
-        Matriz 3D dimensões com `uint8` em ordem row-major.
+        Matriz 3D com `uint8` em ordem row-major.
     """
 
     H, W, _ = img.shape
@@ -137,5 +138,6 @@ def meios_tons_colorida(img: Image, dist: ErrorDist, varredura: int) -> Image:
             ans = varredura_espiral(subimg, dists)
         # escreve o resultado no canal correto
         res[..., ch] = ans
+
     return res
 

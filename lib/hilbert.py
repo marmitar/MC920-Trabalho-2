@@ -103,9 +103,9 @@ def varredura_hilbert(img: Image, dists: ErrorDistDir, idx: Optional[np.ndarray]
         erro = intensidade - valor
 
         tH, tW = dists[d].shape
-        dH, dW = (tH - 1)//2, (tW - 1)//2
+        dW = (tW - 1) //  2
         for i in range(tH):
-            yi = y + i - dH
+            yi = y + i
             for j in range(tW):
                 xj = x + j - dW
                 if 0 <= yi < H and 0 <= xj < W:

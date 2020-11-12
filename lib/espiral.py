@@ -9,7 +9,7 @@ from .nb import jit
 @jit("void(uint8[:,::1], float32[:,::1], float32[:,::1], uint32, uint32, uint32, uint32)")
 def aplica_varredura(res: Image, img: Image, dist: ErrorDist, H: int, W: int, y: int, x: int) -> None:
     tH, tW = dist.shape
-    dH, dW = (tH - 1)//2, (tW - 1)//2
+    dW = (tW - 1) // 2
 
     intensidade = img[y, x]
     if intensidade < 128.0:
@@ -22,7 +22,7 @@ def aplica_varredura(res: Image, img: Image, dist: ErrorDist, H: int, W: int, y:
     erro = intensidade - valor
 
     for i in range(tH):
-        yi = y + i - dH
+        yi = y + i
         for j in range(tW):
             xj = x + j - dW
             if 0 <= yi < H and 0 <= xj < W:
