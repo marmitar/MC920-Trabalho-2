@@ -62,9 +62,9 @@ class Dir(IntEnum):
 @jit("uint32(uint32, uint32)")
 def direcao(dx: int, dy: int):
     if dx > 0:
-        return Dir.direita
-    elif dx < 0:
         return Dir.esquerda
+    elif dx < 0:
+        return Dir.direita
     elif dy < 0:
         return Dir.cima
     else:
@@ -99,27 +99,15 @@ def dist_direcoes(dist: ErrorDist) -> ErrorDistDir:
     return direita, esquerda, cima, baixo
 
 
-
-@overload
-def varredura_hilbert(img: Image, dist: ErrorDist) -> Image:
-    ...
-@overload
-def varredura_hilbert(img: Image, dist: None, idx: np.ndarray, dists: ErrorDistDir) -> Image:
-    ...
-@jit([
-    "uint8[:,::1](uint8[:,::1], optional(float32[:,::1]), uint32[:,::1], UniTuple(float32[:,::1], 4))",
-    "uint8[:,::1](uint8[:,::1], float32[:,::1], optional(uint32[:,::1]), optional(UniTuple(float32[:,::1], 4)))"
-])
-def varredura_hilbert(img: Image, dist: Optional[ErrorDist]=None, idx: Optional[np.ndarray]=None, dists: Optional[ErrorDistDir]=None) -> Image:
+@jit("uint8[:,::1](uint8[:,::1], UniTuple(float32[:,::1], 4), optional(uint32[:,::1]))")
+def varredura_hilbert(img: Image, dists: ErrorDistDir, idx: Optional[np.ndarray]=None) -> Image:
     H, W = img.shape
-
-    if idx is None:
-        idx = hilbert_indices(H, W)
-    if dists is None:
-        dists = dist_direcoes(dist)
 
     img = img.astype(np.float32)
     res = np.empty((H, W), dtype=np.uint8)
+
+    if idx is None:
+        idx = hilbert_indices(H, W)
 
     for x, y, d in idx:
         intensidade = img[x, y]
