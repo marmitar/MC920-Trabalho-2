@@ -3,7 +3,7 @@ from typing import Callable, Optional
 from enum import IntEnum, unique
 
 import numpy as np
-from .nb import jit, prange
+from .nb import jit, prange, USANDO_NUMBA
 from .horizontal import varredura_unidirecional, varredura_alternada
 from .hilbert import varredura_hilbert, hilbert_indices, dist_direcoes
 
@@ -24,10 +24,16 @@ class Varredura(IntEnum):
         elif self == hilbert:
             return varredura_hilbert(img, dist)
 
+    def __str__(self) -> str:
+        """
+        Nome que aparece na linha de comando.
+        """
+        return self.name
+
 
 def meios_tons(img: Image, dist: ErrorDist, varredura=Varredura) -> Image:
     if img.ndim == 3:
-        return meios_tons_cor(img, dist, varredura)
+        return meios_tons_cor(img, dist, varredura.value)
     else:
         return varredura(img, dist)
 
