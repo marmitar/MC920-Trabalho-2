@@ -1,5 +1,7 @@
 from tipos import ErrorDist, Image
 from typing import Tuple, Optional, Union, overload
+
+from enum import IntEnum, unique
 from .nb import jit
 import numpy as np
 
@@ -47,16 +49,26 @@ def hilbert_prox_ind(logN: int, idx: int) -> Tuple[int, int]:
     return x, y
 
 
+
+@unique
+class Dir(IntEnum):
+    direita = 0
+    esquerda = 1
+    cima = 2
+    baixo = 3
+
+
+
 @jit("uint32(uint32, uint32)")
 def direcao(dx: int, dy: int):
     if dx > 0:
-        return 0
+        return Dir.direita
     elif dx < 0:
-        return 1
+        return Dir.esquerda
     elif dy < 0:
-        return 2
+        return Dir.cima
     else:
-        return 3
+        return Dir.baixo
 
 @jit("uint32[:,::1](uint32, uint32)")
 def hilbert_indices(H: int, W: int) -> np.ndarray:

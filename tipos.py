@@ -28,8 +28,8 @@ class Image(ndarray): # type: ignore
     Matrizes que representam imagens em OpenCV e bibliotecas similares.
     """
     dtype: Type[uint8] = uint8
-    ndim: Literal[3] = 3
-    shape: Tuple[int, int, Literal[3]]
+    ndim: Literal[2, 3]
+    shape: Union[Tuple[int, int], Tuple[int, int, Literal[3]]]
 
     def copy(self) -> Image:
         ...
