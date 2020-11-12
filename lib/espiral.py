@@ -36,8 +36,7 @@ def varredura_espiral(img: Image, dists: ErrorDistDir) -> Image:
     img = img.astype(np.float32)
     res = np.empty((H, W), dtype=np.uint8)
 
-    for sm in range((3 + min(H, W)) // 4):
-        s = 2 * sm
+    for s in range((1 + min(H, W)) // 2):
 
         y = s
         d = Dir.direita.value
@@ -56,29 +55,7 @@ def varredura_espiral(img: Image, dists: ErrorDistDir) -> Image:
 
         x = s
         d = Dir.cima.value
-        for y in range(W - 1 - s, s + 1, -1):
+        for y in range(H - 1 - s, s + 1, -1):
             aplica_varredura(res, img, dists[d], H, W, y - 1, x)
-
-        s += 1
-
-        x = W - 1 - s
-        d = Dir.direita.value
-        for y in range(s + 1, H - s):
-            aplica_varredura(res, img, dists[d], H, W, y, x)
-
-        y = s
-        d = Dir.cima.value
-        for x in range(s, W - s):
-            aplica_varredura(res, img, dists[d], H, W, y, x)
-
-        x = s
-        d = Dir.direita.value
-        for y in range(W - 1 - s, s, -1):
-            aplica_varredura(res, img, dists[d], H, W, y - 1, x)
-
-        y = H - 1 - s
-        d = Dir.baixo.value
-        for x in range(W - 1 - s, s + 1, -1):
-            aplica_varredura(res, img, dists[d], H, W, y, x - 1)
 
     return res

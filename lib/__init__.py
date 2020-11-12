@@ -30,6 +30,8 @@ class Varredura(IntEnum):
         tanto de aplicação quanto da distribuição.
     hilbert
         Aplica a distribuição seguindo uma curva de Hilbert.
+    espiral
+        Tentativa de aplicar os erros em varredura espiral.
     """
     unidirecional   = 0
     alternada       = 1
