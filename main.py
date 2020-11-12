@@ -19,14 +19,22 @@ FLOYD = distribuicao([
 
 if __name__ == "__main__":
     import sys
-    if len(sys.argv) > 1:
+    if len(sys.argv) > 2:
+        varredura = sys.argv[2]
+        filename = sys.argv[1]
+    elif len(sys.argv) > 1:
+        varredura = 'alternada'
         filename = sys.argv[1]
     else:
+        varredura = 'alternada'
         filename = 'imagens/lenna.png'
 
-    img = cv2.imread(filename)
-    img = 255 * meios_tons(img, FLOYD, varredura='alternada')
 
-    cv2.imwrite('out.png', img)
-    # cv2.imshow(filename, img)
-    # cv2.waitKey()
+    img = cv2.imread(filename)
+    img = 255 * meios_tons(img, FLOYD, varredura=varredura)
+
+    if len(sys.argv) > 3 and sys.argv[3] == '-':
+        cv2.imshow(filename, img)
+        cv2.waitKey()
+    else:
+        cv2.imwrite('out.png', img)
