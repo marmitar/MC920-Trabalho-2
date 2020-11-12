@@ -107,16 +107,17 @@ def meios_tons_colorida(img: Image, dist: ErrorDist, varredura: int) -> Image:
     Retorno
     -------
     out: np.ndarray
-        Matriz 3D dimensões com `uint8` em ordem row-major..
+        Matriz 3D dimensões com `uint8` em ordem row-major.
     """
 
     H, W, _ = img.shape
     # imagem resultante
     res = np.empty((H, W, 3), dtype=np.uint8)
 
-    # buffers especiais compartilhados na aplicação da hilbert
+    # índices da curva de Hilbert
     if varredura == Varredura.hilbert:
         idx = hilbert_indices(H, W)
+    # distribuição rotacionada em 0, 90, 180 e 270 graus
     if varredura >= Varredura.hilbert:
         dists = err_dist_direcoes(dist)
 
