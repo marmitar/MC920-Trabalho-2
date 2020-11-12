@@ -1,15 +1,9 @@
 """
 Funções de IO com as imagens.
 """
+from tipos import Image
 import cv2
 import numpy as np
-
-# anotações de tipo para 3.7+
-from sys import version_info
-if version_info.minor >= 7:
-    from tipos import Image
-else: # para 3.6
-    Image = 'Image' # type: ignore
 
 
 def imgread(arquivo: str, modo: int=cv2.IMREAD_COLOR) -> Image:
@@ -20,6 +14,8 @@ def imgread(arquivo: str, modo: int=cv2.IMREAD_COLOR) -> Image:
     ----------
     arquivo: str
         Caminho para o arquivo de imagem a ser lido.
+    modo: int
+        Flag de leitura da biblioteca OpenCV.
 
     Retorno
     -------

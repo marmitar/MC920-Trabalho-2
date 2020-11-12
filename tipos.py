@@ -2,7 +2,7 @@
 Procolos para tipagem estática com ``mypy``.
 """
 from __future__ import annotations
-from numpy import ndarray, uint8, int64, float64
+from numpy import ndarray, uint8, float32
 from typing import TYPE_CHECKING, Type, overload, Union, Tuple
 
 if TYPE_CHECKING:
@@ -18,7 +18,7 @@ class ErrorDist(ndarray): # type: ignore
     """
     Matrizes que ...
     """
-    dtype: Type[float64]
+    dtype: Type[float32]
     ndim: Literal[2] = 2
     shape: Tuple[int, int]
 

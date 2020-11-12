@@ -1,9 +1,9 @@
-import sys
+import sys, cv2, warnings
 from argparse import ArgumentParser, ArgumentTypeError
+
 from inout import imgread, imgwrite, imgshow
 from lib import meios_tons, Varredura, USANDO_NUMBA
 from dists import ERR_DIST, ErrorDist
-import cv2
 
 
 if sys.version_info.major < 3 or sys.version_info.minor < 8:
@@ -14,14 +14,14 @@ if sys.version_info.major < 3 or sys.version_info.minor < 8:
     funciona, mas com algumas funcionalidades limitadas. Outras versões não
     funcionam por causa das f-strings.
     """
-    import warnings
     warnings.warn(msg)
 if not USANDO_NUMBA:
     msg = """
 
-    Sem as otimizações do pacote Numba (https://numba.pydata.org/), a ferramenta
+    Sem as otimizações do pacote Numba (https://numba.pydata.org/) a ferramenta
     demora cerca de 30 vezes mais do que o necessário.
     """
+    warnings.warn(msg)
 
 
 # # # # # # # # # # # # # # #
@@ -85,7 +85,7 @@ if __name__ == "__main__":
 
     # aplica pontilhado
     img = meios_tons(img, args.dist, args.varredura)
-    # retorna  para o range de 8 bits
+    # range completo para a visualização
     img *= 255
 
     # saída
