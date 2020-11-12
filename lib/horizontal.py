@@ -83,7 +83,7 @@ def varredura_alternada(img: Image, dist: ErrorDist) -> Image:
             for i in range(tH):
                 xi = x + i - dH
                 for jm in range(tW):
-                    j = tW - j
+                    j = tW - 1 - jm
                     yj = y + j - dW
                     if 0 <= xi < H and 0 <= yj < W:
                         img[xi, yj] += dist[i, j] * erro
