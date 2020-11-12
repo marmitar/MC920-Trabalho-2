@@ -3,9 +3,9 @@ from typing import Callable, Optional
 from enum import IntEnum, unique
 
 import numpy as np
-from .nb import jit, prange, SIG_VARREDURA
+from .nb import jit, prange
 from .horizontal import varredura_unidirecional, varredura_alternada
-from .hilbert import varredura_hilbert, hilbert_indices
+from .hilbert import varredura_hilbert, hilbert_indices, dist_direcoes
 
 
 @unique
@@ -39,8 +39,10 @@ def meios_tons_cor(img: Image, dist: ErrorDist, varredura: int) -> Image:
 
     H, W, _ = img.shape
     res = np.empty((H, W, 3), dtype=np.uint8)
+
     if varredura == 2:
         idx = hilbert_indices(H, W)
+        dists = dist_direcoes(dist)
 
     for ch in prange(3):
         subimg = np.copy(img[..., ch])
@@ -50,7 +52,7 @@ def meios_tons_cor(img: Image, dist: ErrorDist, varredura: int) -> Image:
         elif varredura == 1:
             ans = varredura_alternada(subimg, dist)
         else:
-            ans = varredura_hilbert(subimg, dist, idx)
+            ans = varredura_hilbert(subimg, None, idx, dists)
 
         res[..., ch] = ans
     return res
