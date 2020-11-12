@@ -2,22 +2,11 @@ from tipos import ErrorDist, Image
 from typing import Tuple, Optional, Union, overload
 
 from enum import IntEnum, unique
+from .direcao import ErrorDistDir, Dir
 from .nb import jit
 import numpy as np
 
 
-
-@jit("uint32(uint32)")
-def log2(num: int) -> int:
-    if num == 0:
-        return 0
-
-    i = 0
-    num -= 1
-    while num > 0:
-        num //= 2
-        i += 1
-    return i
 
 # http://blog.marcinchwedczuk.pl/iterative-algorithm-for-drawing-hilbert-curve
 @jit("UniTuple(uint32, 2)(uint32, uint32)")
@@ -49,26 +38,29 @@ def hilbert_prox_ind(logN: int, idx: int) -> Tuple[int, int]:
     return x, y
 
 
-
-@unique
-class Dir(IntEnum):
-    direita = 0
-    esquerda = 1
-    cima = 2
-    baixo = 3
-
-
-
-@jit("uint32(uint32, uint32)")
-def direcao(dx: int, dy: int):
-    if dx > 0:
-        return Dir.esquerda
-    elif dx < 0:
+@jit("uint32(uint32, uint32, uint32, uint32)")
+def direcao(x: int, ox: int, y: int, oy: int) -> int:
+    if x > ox:
         return Dir.direita
-    elif dy < 0:
+    elif x < ox:
+        return Dir.esquerda
+    elif y < oy:
         return Dir.cima
     else:
         return Dir.baixo
+
+
+@jit("uint32(uint32)")
+def log2(num: int) -> int:
+    if num == 0:
+        return 0
+
+    i = 0
+    num -= 1
+    while num > 0:
+        num //= 2
+        i += 1
+    return i
 
 @jit("uint32[:,::1](uint32, uint32)")
 def hilbert_indices(H: int, W: int) -> np.ndarray:
@@ -78,25 +70,15 @@ def hilbert_indices(H: int, W: int) -> np.ndarray:
     N = 1 << logN
     j = 0
 
-    ox, oy = hilbert_prox_ind(logN, 0)
+    oy, ox = hilbert_prox_ind(logN, 0)
     for i in range(N * N):
-        x, y = hilbert_prox_ind(logN, i)
-        if x < H and y < W:
-            idx[j] = x, y, direcao(x - ox, y - oy)
-            ox, oy = x, y
+        y, x = hilbert_prox_ind(logN, i)
+        if y < H and x < W:
+            idx[j] = y, x, direcao(x, ox, y, oy)
+            oy, ox = y, x
             j += 1
 
     return idx
-
-ErrorDistDir = Tuple[ErrorDist, ErrorDist, ErrorDist, ErrorDist]
-
-@jit("UniTuple(float32[:,::1], 4)(float32[:,::1])")
-def dist_direcoes(dist: ErrorDist) -> ErrorDistDir:
-    direita = dist
-    esquerda = np.copy(np.flip(dist))
-    cima = np.copy(dist[:,::-1].T)
-    baixo = np.copy(dist[::-1].T)
-    return direita, esquerda, cima, baixo
 
 
 @jit("uint8[:,::1](uint8[:,::1], UniTuple(float32[:,::1], 4), optional(uint32[:,::1]))")
@@ -109,13 +91,13 @@ def varredura_hilbert(img: Image, dists: ErrorDistDir, idx: Optional[np.ndarray]
     if idx is None:
         idx = hilbert_indices(H, W)
 
-    for x, y, d in idx:
-        intensidade = img[x, y]
+    for y, x, d in idx:
+        intensidade = img[y, x]
         if intensidade < 128.0:
-            res[x, y] = 0
+            res[y, x] = 0
             valor = 0.0
         else:
-            res[x, y] = 1
+            res[y, x] = 1
             valor = 255.0
 
         erro = intensidade - valor
@@ -123,9 +105,9 @@ def varredura_hilbert(img: Image, dists: ErrorDistDir, idx: Optional[np.ndarray]
         tH, tW = dists[d].shape
         dH, dW = (tH - 1)//2, (tW - 1)//2
         for i in range(tH):
-            xi = x + i - dH
+            yi = y + i - dH
             for j in range(tW):
-                yj = y + j - dW
-                if 0 <= xi < H and 0 <= yj < W:
-                    img[xi, yj] += dists[d][i, j] * erro
+                xj = x + j - dW
+                if 0 <= yi < H and 0 <= xj < W:
+                    img[yi, xj] += dists[d][i, j] * erro
     return res

@@ -1,5 +1,5 @@
 """
-Operações de pontilhado e modos de varredura.
+Operação de pontilhado e modos de varredura.
 """
 from tipos import Image, ErrorDist
 from enum import IntEnum, unique
@@ -7,7 +7,9 @@ import numpy as np
 
 from .nb import jit, prange, USANDO_NUMBA
 from .horizontal import varredura_unidirecional, varredura_alternada
-from .hilbert import varredura_hilbert, hilbert_indices, dist_direcoes
+from .direcao import err_dist_direcoes
+from .hilbert import varredura_hilbert, hilbert_indices
+from .espiral import varredura_espiral
 
 
 # # # # # # # # # # # #
@@ -32,6 +34,7 @@ class Varredura(IntEnum):
     unidirecional   = 0
     alternada       = 1
     hilbert         = 2
+    espiral         = 3
 
     def __call__(self, img: Image, dist: ErrorDist) -> Image:
         """
@@ -42,7 +45,9 @@ class Varredura(IntEnum):
         elif self == Varredura.alternada:
             return varredura_alternada(img, dist)
         elif self == Varredura.hilbert:
-            return varredura_hilbert(img, dist_direcoes(dist), None)
+            return varredura_hilbert(img, err_dist_direcoes(dist), None)
+        elif self == Varredura.espiral:
+            return varredura_espiral(img, err_dist_direcoes(dist))
 
     def __str__(self) -> str:
         """
@@ -110,7 +115,8 @@ def meios_tons_colorida(img: Image, dist: ErrorDist, varredura: int) -> Image:
     # buffers especiais compartilhados na aplicação da hilbert
     if varredura == Varredura.hilbert:
         idx = hilbert_indices(H, W)
-        dists = dist_direcoes(dist)
+    if varredura >= Varredura.hilbert:
+        dists = err_dist_direcoes(dist)
 
     # aplica os canais em paralelo
     for ch in prange(3):
@@ -122,8 +128,10 @@ def meios_tons_colorida(img: Image, dist: ErrorDist, varredura: int) -> Image:
             ans = varredura_unidirecional(subimg, dist)
         elif varredura == Varredura.alternada:
             ans = varredura_alternada(subimg, dist)
-        else:
+        elif varredura == Varredura.hilbert:
             ans = varredura_hilbert(subimg, dists, idx)
+        else:
+            ans = varredura_espiral(subimg, dists)
         # escreve o resultado no canal correto
         res[..., ch] = ans
     return res

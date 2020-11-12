@@ -1,7 +1,9 @@
+"""
+Varreduras horizontais: undirecional ou alternada.
+"""
 from tipos import Image, ErrorDist
-
-from .nb import jit
 import numpy as np
+from .nb import jit
 
 
 
@@ -15,23 +17,23 @@ def varredura_unidirecional(img: Image, dist: ErrorDist) -> Image:
     img = img.astype(np.float32)
     res = np.empty((H, W), dtype=np.uint8)
 
-    for x in range(H):
-        for y in range(W):
-            intensidade = img[x, y]
+    for y in range(H):
+        for x in range(W):
+            intensidade = img[y, x]
             if intensidade < 128.0:
-                res[x, y] = 0
+                res[y, x] = 0
                 valor = 0.0
             else:
-                res[x, y] = 1
+                res[y, x] = 1
                 valor = 255.0
 
             erro = intensidade - valor
             for i in range(tH):
-                xi = x + i - dH
+                yi = y + i - dH
                 for j in range(tW):
-                    yj = y + j - dW
-                    if 0 <= xi < H and 0 <= yj < W:
-                        img[xi, yj] += dist[i, j] * erro
+                    xj = x + j - dW
+                    if 0 <= yi < H and 0 <= xj < W:
+                        img[yi, xj] += dist[i, j] * erro
     return res
 
 
@@ -45,46 +47,46 @@ def varredura_alternada(img: Image, dist: ErrorDist) -> Image:
     img = img.astype(np.float32)
     res = np.empty((H, W), dtype=np.uint8)
 
-    for xm in range((H + 1)//2):
-        x = 2 * xm
+    for ym in range((H + 1)//2):
+        y = 2 * ym
 
-        for y in range(W):
-            intensidade = img[x, y]
+        for x in range(W):
+            intensidade = img[y, x]
             if intensidade < 128.0:
-                res[x, y] = 0
+                res[y, x] = 0
                 valor = 0.0
             else:
-                res[x, y] = 1
+                res[y, x] = 1
                 valor = 255.0
 
             erro = intensidade - valor
             for i in range(tH):
-                xi = x + i - dH
+                yi = y + i - dH
                 for j in range(tW):
-                    yj = y + j - dW
-                    if 0 <= xi < H and 0 <= yj < W:
-                        img[xi, yj] += dist[i, j] * erro
+                    xj = x + j - dW
+                    if 0 <= yi < H and 0 <= xj < W:
+                        img[yi, xj] += dist[i, j] * erro
 
-        x += 1
-        if x == H:
+        y += 1
+        if y == H:
             break
 
-        for ym in range(W):
-            y = W - 1 - ym
-            intensidade = img[x, y]
+        for xm in range(W):
+            x = W - 1 - xm
+            intensidade = img[y, x]
             if intensidade < 128.0:
-                res[x, y] = 0
+                res[y, x] = 0
                 valor = 0.0
             else:
-                res[x, y] = 1
+                res[y, x] = 1
                 valor = 255.0
 
             erro = intensidade - valor
             for i in range(tH):
-                xi = x + i - dH
+                yi = y + i - dH
                 for jm in range(tW):
                     j = tW - 1 - jm
-                    yj = y + j - dW
-                    if 0 <= xi < H and 0 <= yj < W:
-                        img[xi, yj] += dist[i, j] * erro
+                    xj = x + j - dW
+                    if 0 <= yi < H and 0 <= xj < W:
+                        img[yi, xj] += dist[i, j] * erro
     return res
