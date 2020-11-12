@@ -1,21 +1,48 @@
+"""
+Definição das ditribuições de erro para o trabalho 2.
+"""
 from typing import Dict, List
 from tipos import ErrorDist
 import numpy as np
 
 
+# # # # # # # # # #
+# Acesso por nome #
+
+# Dicinário para acesso por nome.
 ERR_DIST: Dict[str, ErrorDist] = {}
 
-def distribuicao(nome: str, total: int, data: List[List[float]]) -> None:
+
+def distribuicao(nome: str, total: int, data: List[List[int]]) -> None:
+    """
+    Insere a distribuição no dicionário, usando o nome em conjunto dos seus
+    idealizadores (ex. 'FLOYD_STEINBERG') e o nome separado de cada um (
+    'FLOYD' e 'STEINBERG').
+
+    Parâmetros
+    ----------
+    nome: str
+        Nome da distribuição de erros.
+    total: int
+        Soma total da distribuição.
+    data: list
+        Os pesos da vizinhança na distribuição de erros.
+    """
+    # evitando erros simples na distribuição
     assert total == np.sum(data)
 
+    # monta a matriz da distribuição, como float32 para o Numba
     data = [[x / total for x in row] for row in data]
     dist = np.asarray(data, dtype=np.float32, order='C')
 
+    # insere a dstribuição em cada um dos seus nomes
     ERR_DIST[nome] = dist
     for nome in nome.split('_'):
         ERR_DIST[nome] = dist
 
 
+# # # # # # # # # # # # # # #
+# Distribuições do trabalho #
 
 distribuicao('FLOYD_STEINBERG', 16, [
     [0, 0, 7],
