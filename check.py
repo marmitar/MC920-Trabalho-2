@@ -29,15 +29,37 @@ def jaccard(f, g):
 
 DIFS = [RMSE, SNR, PSNR, corr, cov, jaccard]
 
+varredura = 'alternada'
 
-_, img, dist, varredura = sys.argv
+_, idx = sys.argv
 
-f = cv2.imread(f'imagens/{img}.png')
-g = cv2.imread(f'build/{varredura}/{dist}/{img}.png')
 
-if f is None or g is None:
-    raise ValueError(f'não foi possível ler imagens', (img, dist, varredura))
 
-for fun in DIFS:
-    name = fun.__name__
-    print(f'\t{name:>8s} {fun(f, g):9.3f}')
+DISTS = [
+    'Floyd e Steinberg',
+    'Stevenson e Arci',
+    'Burkes',
+    'Sierra',
+    'Stucki',
+    'Jarvis, Judice e Ninke'
+]
+distr = DISTS[int(idx)]
+dist = distr.split(' ')[0].rstrip(',').lower()
+
+print('\\multirow{6}{*}{' + distr + '}')
+
+for img in ['baboon', 'peppers', 'monalisa', 'watch']:
+
+    f = cv2.imread(f'imagens/{img}.png')
+    g = cv2.imread(f'build/{varredura}/{dist}/{img}.png')
+
+    if f is None or g is None:
+        raise ValueError(f'não foi possível ler imagens', (img, dist, varredura))
+
+    print(f'& \\texttt{{{img}.png}} &', ' & '.join(f'{fn(f, g):.3f}' for fn in [RMSE, SNR, PSNR, corr]), '\\\\')
+
+print('\\midrule')
+
+# for fun in DIFS:
+#     name = fun.__name__
+#     print(f'\t{name:>8s} {fun(f, g):9.3f}')
