@@ -1,19 +1,20 @@
-\newcommand{\imagem}[1]{
+\newcommand{\imagem}[2][]{
     \begin{subfigure}{\textwidth}
         \centering
         \begin{subfigure}{0.32\textwidth}
             \centering
-            \includegraphics[width=4.4cm]{imagens/#1.png}
-            \caption{\texttt{figuras/#1.png}}
+            \includegraphics[width=4.4cm]{imagens/#2.png}
+            \caption{\texttt{figuras/#2.png}}
         \end{subfigure}%
         \begin{subfigure}{0.32\textwidth}
             \centering
-            \includegraphics[width=4.4cm]{resultados/var/unidir_#1.png}
+            \includegraphics[width=4.4cm]{resultados/var/unidir_#2.png}
             \caption{Varredura unidirecional.}
+            #1
         \end{subfigure}%
         \begin{subfigure}{0.32\textwidth}
             \centering
-            \includegraphics[width=4.4cm]{resultados/var/alternada_#1.png}
+            \includegraphics[width=4.4cm]{resultados/var/alternada_#2.png}
             \caption{Varredura alternada.}
         \end{subfigure}
     \end{subfigure}
@@ -22,9 +23,38 @@
 \begin{figure}[H]
     \centering
     \imagem{baboon}\\[8pt]
-    \imagem{peppers}\\[8pt]
+    \imagem[\label{fig:resultado:peppers}]{peppers}\\[8pt]
     \imagem{monalisa}\\[8pt]
     \imagem{watch}
 
     \caption{Aplicação da distribuição de Floyd e Steinberg com as duas varreduras.}
+    \label{fig:resultado:varredura}
 \end{figure}
+
+Na \cref{fig:resultado:varredura}, os resultados das duas varreduras são visualmente muito semelhantes e asmétricas da \cref{tab:varedura} corroboram com essa ideia, mostrando uma variação pequena de uma opção para a outra. A maior diferença visual aparece na imagem \texttt{peppers.png}, onde a varredura unidirecional (\ref{fig:resultado:peppers}) gera pequenos artefatos em formato de linhas horizontais.
+
+\begin{table}[H]
+    \centering
+    \caption{Comparativo entre os resultados da \cref{fig:resultado:varredura}.}
+    \label{tab:varedura}
+
+    \begin{tabular}{cc|cccc}
+        \toprule
+        Figura & Varredura & RMSE & SNR (dB) & PSNR (dB) & Correlação \\
+        \midrule
+        \multirow{2}{*}{\texttt{baboon.png}} & Unidirecional & 10.367 & -0.004 & 27.818 & 0.480 \\
+        & Alternada & 10.364 & -0.001 & 27.820 & 0.477 \\
+        \midrule
+        \multirow{2}{*}{\texttt{peppers.png}} & Unidirecional & 10.322 & -0.017 & 27.856 & 0.531 \\
+        & Alternada & 10.325 & -0.020 & 27.853 & 0.531 \\
+        \midrule
+        \multirow{2}{*}{\texttt{monalisa.png}} & Unidirecional & 10.411 & 0.009 & 27.781 & 0.419 \\
+        & Alternada & 10.407 & 0.013 & 27.784 & 0.418 \\
+        \midrule
+        \multirow{2}{*}{\texttt{watch.png}} & Unidirecional & 10.262 & 0.016 & 27.907 & 0.372 \\
+        & Alternada & 10.263 & 0.015 & 27.905 & 0.371 \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+Nos resultados seguintes, a imagens serão varridas de forma alternada, como este é o padrão da ferramenta.
