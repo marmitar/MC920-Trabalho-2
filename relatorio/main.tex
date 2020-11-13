@@ -27,8 +27,8 @@
 \newmintinline[pyline]{python}{}
 \newcommand{\pyref}[2]{\href{#1}{\texttt{#2}}}
 
-\SetupFloatingEnvironment{listing}{name=Código}
-\captionsetup[listing]{position=below,skip=-1pt}
+% \SetupFloatingEnvironment{listing}{name=Código}
+% \captionsetup[listing]{position=below,skip=-1pt}
 
 \usepackage{csquotes}
 \usepackage[style=verbose-ibid,autocite=footnote,notetype=foot+end,backend=biber]{biblatex}
@@ -72,9 +72,12 @@
 
 \newcommand*{\Scale}[2][4]{\scalebox{#1}{\ensuremath{#2}}}%
 
+\newcommand{\red}[1]{\textcolor{red}{\textbf{#1}}}
 
 \begin{document}
 
     \pagestyle{main}
+
+    \input{textos/intro}
 
 \end{document}
