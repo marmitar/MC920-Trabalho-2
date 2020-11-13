@@ -1,0 +1,17 @@
+Nas figuras \ref{fig:peppers:hilbert} e \ref{fig:watch:hilbert}, podemos ver que as curvas de Hilbert causam um contraste maior na imagem. Isso é um indicativo que os erros não estão sendo distribuídos corretamente, provavelmente devido à algum problema de implementação.
+
+\begin{figure}[H]
+    \centering
+    \input{figuras/extra/peppers}
+    \caption{Aplicação das quatro varreduras na \texttt{peppers.png}.}
+    \label{fig:extra:peppers}
+\end{figure}
+
+Já as curvas em espiral funcionam como esperado, entretanto aparece em amabas as figuras \ref{fig:peppers:espiral} e \ref{fig:watch:espiral} um artefato nas diagonais da imagem, onde ocorre a rotação da matriz de distribuições.
+
+\begin{figure}[H]
+    \centering
+    \input{figuras/extra/watch}
+    \caption{Aplicação das qautro varreduras na \texttt{watch.png}.}
+    \label{fig:extra:watch}
+\end{figure}
