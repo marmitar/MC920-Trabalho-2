@@ -1,6 +1,5 @@
 """
 Varredura seguindo uma espiral retangular.
-Não funciona corretamente.
 """
 from tipos import Image, ErrorDist
 from typing import Tuple

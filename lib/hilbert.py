@@ -1,5 +1,6 @@
 """
 Varredura seguindo curvas de Hilbert.
+Não funciona corretamente.
 """
 from tipos import ErrorDist, Image
 from typing import Tuple, Optional, Union, overload
