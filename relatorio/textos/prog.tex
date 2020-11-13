@@ -46,7 +46,7 @@ Além das bibliotecas padrão de Python, foram utilizados os pacotes NumPy \auto
 
     Os argumentos opicionais podem ser vistos com \mintinline{bash}{$ python3 main.py --help}. A mais importante das opções é \mintinline{text}{--output}, ou \mintinline{text}{-o}, que salva o resultado em um arquivo PNG em vez de exibir na tela. Se é desejável tanto a exibição da imagem quanto o salvamento no arquivo, o argumento \mintinline{text}{--force-show} ou \mintinline{text}{-f} pode ser usado. Também existe a opção \mintinline{bash}{--grayscale} ou \mintinline{bash}{-g} que faz o processamento em escala de cinza.
 
-    As outras opções são referentes à técnica de pontilhado e serão descritas nas seções \red{sec:impl} e \red{sec:resultado}.
+    As outras opções são referentes à técnica de pontilhado. A flag \mintinline{bash}{--varedura} ou \mintinline{bash}{-v} controla o forma de varrredura na image, como descrito na \ref{sec:varredura}. A distribuição de erros aplicada pode ser modificada com \mintinline{bash}{--destribuicao} ou \mintinline{bash}{-d} e aceita o nome de qualquer um de seus idealizadores.
 
 \subsection{A biblioteca Numba}
 
