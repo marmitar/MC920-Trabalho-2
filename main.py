@@ -1,20 +1,16 @@
 import sys, cv2, warnings
 from argparse import ArgumentParser, ArgumentTypeError
+if sys.version_info.major < 3 or sys.version_info.minor < 7:
+    msg = """
+
+    Essa ferramenta foi desenvolvida com Python 3.8 e funciona corretamente
+    com Python 3.7 também. Outras versões não funcionam.
+    """
+    warnings.warn(msg)
 
 from inout import imgread, imgwrite, imgshow
 from lib import meios_tons, Varredura, USANDO_NUMBA
 from dists import ERR_DIST, ErrorDist
-
-
-if sys.version_info.major < 3 or sys.version_info.minor < 8:
-    msg = """
-
-    Essa ferramenta foi desenvolvida com Python 3.8 e funciona corretamente
-    nessa versão. Python 3.7 deveria funcionar sem erros também. Python 3.6
-    funciona, mas com algumas funcionalidades limitadas. Outras versões não
-    funcionam por causa das f-strings.
-    """
-    warnings.warn(msg)
 if not USANDO_NUMBA:
     msg = """
 
@@ -22,6 +18,7 @@ if not USANDO_NUMBA:
     demora cerca de 30 vezes mais do que o necessário.
     """
     warnings.warn(msg)
+
 
 
 # # # # # # # # # # # # # # #
@@ -73,11 +70,7 @@ parser.add_argument('-d', '--distribuicao', dest='dist', type=dist_err, default=
 
 
 if __name__ == "__main__":
-    # argumentos fora de ordem no Python 3.7+
-    if sys.version_info.minor >= 7:
-        args = parser.parse_intermixed_args()
-    else:
-        args = parser.parse_args()
+    args = parser.parse_intermixed_args()
 
     # entrada
     arquivo = args.input
