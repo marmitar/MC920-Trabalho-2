@@ -65,8 +65,8 @@ class Varredura(IntEnum):
 def meios_tons(img: Image, dist: Optional[ErrorDist]=None, varredura=Varredura) -> Image:
     """
     Aplicação da técnica de meios-tons seguindo uma distribuição e um padrão
-    de varredura. Quando a distribuição não é dada, faz a conversão de meios-
-    -tons simples.
+    de varredura. Quando a distribuição não é dada, faz a conversão de escalas
+    de cinza simples.
 
     Parâmetros
     ----------
