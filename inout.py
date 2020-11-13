@@ -68,15 +68,21 @@ def imgshow(img: Image, nome: str="", delay: int=250) -> None:
     ----------
     img: np.ndarray
         Matriz representando uma imagem.
-    nome: str
-        Nome da janela a ser aberta. Opcional.
+    nome: str, opcional
+        Nome da janela a ser aberta.
+    delay: int, opcional
+        Tempo em milisegundos de checagem da janela.
     """
     try:
+        cv2.namedWindow(nome, cv2.WINDOW_AUTOSIZE)
         cv2.imshow(nome, img)
 
         # espera alguma chave ou a janela ser fechada
         while cv2.waitKey(delay) < 0:
-            if cv2.getWindowProperty(nome, cv2.WND_PROP_VISIBLE) <= 0:
+            # problemas com versões diferentes de python e opencv
+            prop1 = cv2.getWindowProperty(nome, cv2.WND_PROP_ASPECT_RATIO)
+            prop2 = cv2.getWindowProperty(nome, cv2.WND_PROP_VISIBLE)
+            if prop1 == prop2:
                 break
         cv2.destroyAllWindows()
         cv2.waitKey(1)
