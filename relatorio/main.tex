@@ -51,20 +51,20 @@
 \usetikzlibrary{matrix}
 \usetikzlibrary{positioning}
 
-\newenvironment{kmatrix}{
+\newenvironment{kmatrix}[1][1.3cm]{
     \begin{tikzpicture}[node distance=0cm]
         \tikzset{square matrix/.style={
                 matrix of nodes,
                 column sep=-\pgflinewidth, row sep=-\pgflinewidth,
                 nodes={draw,
-                    minimum height=0.7cm,
+                    minimum height=#1,
                     anchor=center,
-                    text width=0.7cm,
+                    text width=#1,
                     align=center,
                     inner sep=0pt
                 },
             },
-            square matrix/.default=0.7cm
+            square matrix/.default=#1
         }
 }{
     \end{tikzpicture}%
