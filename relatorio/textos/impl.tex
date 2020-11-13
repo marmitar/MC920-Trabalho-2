@@ -6,7 +6,7 @@
 
     Assim, quando um pixel resulta em valor muito distante do original, seus vizinhos são reduzidos ou incrementados, aumentando a chance de que eles sejam transformados para outro nível. Isso faz com que a vizinhaça mantenha um pouco mais da distribuição local de intensidade, fazendo com que imagem fique similar à original para o nosso sistema visual.
 
-    A distribuição de erros pode ser feita de várias formas, como pode ser visto na \cref{sec:resultado}.
+    A distribuição de erros pode ser feita de várias formas, como pode ser visto na \cref{sec:distribuicoes}.
 
 \subsection{Formas de Varredura} \label{sec:varredura}
 
@@ -20,9 +20,27 @@
         \label{fig:varredura}
     \end{figure}
 
-    Para a varrudura alternada, a distribuição é aplicada em duas orientações, normal e invertida horizontalmente, enquanto para as curvas em espiral e de Hilbert a distribuição dois considerada em quatro orientações, seguindo rotações sucessivas de 90\textdegree{} na matriz.
+    Para a varredura alternada, a distribuição é aplicada em duas orientações, normal e invertida horizontalmente, enquanto para as curvas em espiral e de Hilbert a distribuição dois considerada em quatro orientações, seguindo rotações sucessivas de 90\textdegree{} na matriz.
 
-    % \begin{figure}
-    %     \centering
-    %     \input{figuras/dists}
-    % \end{figure}
+\subsection{Distribuições de Erro} \label{sec:distribuicoes}
+
+    A distribuições são escolhidas na linha de comando pelo nome de um de seus idelizadores ou de todos juntos, separados por "\texttt{\_}". Assim, as seguintes opções são equivalentes:
+
+    \begin{minted}{bash}
+        $ python3 main.py imagens/peppers.png -d jarvis
+        # ou
+        $ python3 main.py imagens/peppers.png -d Judice
+        # ou
+        $ python3 main.py imagens/peppers.png -d NINKE
+        # ou
+        $ python3 main.py imagens/peppers.png -d JARVIS_judice_Ninke
+    \end{minted}
+
+    As distribuições estão apresentadas na \cref{fig:distribuicoes} abaixo.
+
+    \begin{figure}[H]
+        \centering
+        \input{figuras/dists}
+        \caption{Distribuições de erro aplicadas neste trabalho.}
+        \label{fig:distribuicoes}
+    \end{figure}
