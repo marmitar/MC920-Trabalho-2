@@ -1,0 +1,49 @@
+\section{O Programa}
+
+Além das bibliotecas padrão de Python, foram utilizados os pacotes NumPy \autocite{ref:numpy} e, de forma opcional, Numba \autocite{ref:numba}.
+
+\subsection{Código Fonte}
+
+    O programa foi desenvolvido em Python 3.8, mas deveria funcionar com a versões 3.7 e 3.9 também. Além disso, o código fonte foi separado nos seguintes arquivos:
+
+    \begin{description}
+        \item[main.py] É o corpo do programa, resposável por processar os comandos e as opções da linha de comando.
+
+        \item[lib] Pacote interno com as operações de pontilhado.
+
+        \begin{description}
+            \item[lib/\_\_init\_\_.py] Função geral de aplicação do pontilhado em imagens coloridas e em escala de cinza, com as opções de varredura.
+
+            \item[lib/nb.py] Mock up do decorador \mintinline{python3}{@numba.jit} \autocite{ref:numbajit}, para que a ferramenta funcione tanto com ou sem a biblioteca Numba.
+
+            \item[lib/horizontal.py] Implementação das varreduras horizontais, tanto a varredura unidirecional quanto a alternada.
+        \end{description}
+
+        \item[dists.py] Definição das distribuições de erro ao longo da operação de meios-tons.
+
+        \item[inout.py] Funções que tratam da entrada e saída do programa, como leitura e escrita de arquivos de imagem e também da apresentação da imagem em uma janela gráfica.
+
+        \item[tipos.py] Definição de alguns tipos para checagem estática com \texttt{mypy} \autocite{ref:mypy}.
+    \end{description}
+
+    Todas as figuras base utilizadas neste relatório podem ser encontradas na pasta \texttt{imagens} do código fonte, como descrito nos rótulos da \cref{fig:base}. Além disso, foi disponibilizado também um \textit{script} em \texttt{bash}, \texttt{run.sh}, que realiza todos os processamentos requeridos em cada uma das imagens na pasta.
+
+\subsection{Execução} \label{sec:execucao}
+
+    A execução deve ser feita através do interpretador de Python 3.7+. A única entrada obrigatória é o caminho para a imagem PNG que será processada. Ao final da execução, a imagem resultante será exibida na tela. Por exemplo, o comando abaixo apresenta a \cref{fig:execucao} em uma nova janela gráfica.
+
+    \begin{minted}{text}
+        $ python3 main.py imagens/baboon.png
+    \end{minted}
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=6cm]{resultados/execucao.png}
+
+        \caption{Aplicação de pontilhado com a \texttt{baboon.png}.}
+        \label{fig:execucao}
+    \end{figure}
+
+    Os argumentos opicionais podem ser vistos com \mintinline{bash}{$ python3 main.py --help}. A mais importante das opções é \mintinline{text}{--output}, ou \mintinline{text}{-o}, que salva o resultado em um arquivo PNG em vez de exibir na tela. Se é desejável tanto a exibição da imagem quanto o salvamento no arquivo, o argumento \mintinline{text}{--force-show} ou \mintinline{text}{-f} pode ser usado. Também existe a opeção \mintinline{bash}{--grayscale} ou \mintinline{bash}{-g} que faz o processamento em escala de cinza.
+
+    As outras opções são referentes à técnica de pontilhado e serão descritas nas seções \red{sec:impl} e \red{sec:resultado}.
