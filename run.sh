@@ -19,7 +19,7 @@ for file in $(ls imagens/*.png); do
 
     for v in ${varredura[@]}; do
         for d in ${dists[@]}; do
-            $prog -o $build/$v/$d_$out $file -v $v -d $d &
+            $prog -o $build/$v/$d\_$out $file -v $v -d $d &
             pids[${proc}]=$!
             proc=$((proc+1))
         done
