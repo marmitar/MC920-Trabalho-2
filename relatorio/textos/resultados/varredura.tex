@@ -1,0 +1,30 @@
+\newcommand{\imagem}[1]{
+    \begin{subfigure}{\textwidth}
+        \centering
+        \begin{subfigure}{0.32\textwidth}
+            \centering
+            \includegraphics[width=4.4cm]{imagens/#1.png}
+            \caption{\texttt{figuras/#1.png}}
+        \end{subfigure}%
+        \begin{subfigure}{0.32\textwidth}
+            \centering
+            \includegraphics[width=4.4cm]{resultados/var/unidir_#1.png}
+            \caption{Varredura unidirecional.}
+        \end{subfigure}%
+        \begin{subfigure}{0.32\textwidth}
+            \centering
+            \includegraphics[width=4.4cm]{resultados/var/alternada_#1.png}
+            \caption{Varredura alternada.}
+        \end{subfigure}
+    \end{subfigure}
+}
+
+\begin{figure}[H]
+    \centering
+    \imagem{baboon}\\[8pt]
+    \imagem{peppers}\\[8pt]
+    \imagem{monalisa}\\[8pt]
+    \imagem{watch}
+
+    \caption{Aplicação da distribuição de Floyd e Steinberg com as duas varreduras.}
+\end{figure}
