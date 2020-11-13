@@ -1,27 +1,33 @@
-Os valores da \cref{tab:distribuicoes} indicam que as figuras \texttt{peppers.png} e \texttt{watch.png} não tiveram muitas diferenças com a mudança de distribuição.
+Os valores da \cref{tab:distribuicoes} indicam que a figura \texttt{monalisa.png} foi a que mais sofreu com a mudança de distribuição, enquanto a \texttt{watch.png} quase não teve diferença nas métricas. Isso se deve principalmente ao tamanho da imagem digital, que foram descritos na \cref{sec:intro}. Isso fica mais claro observando os resultados, nas figuras \ref{fig:dist:monalisa} e \ref{fig:dist:watch}.
 
 \begin{figure}[H]
     \centering
     \input{figuras/baboon}
-    \caption{Aplicação das 6 distribuições de erro na \cref{fig:baboon:orig}.}
+    \caption{Aplicação das distribuições de erro na \cref{fig:baboon:orig}.}
+    \label{fig:dist:baboon}
 \end{figure}
+
+Além disso, a diferença entre \texttt{baboon.png} e \texttt{peppers.png}, que têm mesma quantidade de pixels, acontece principalmente por causa das regiões de alta frequência, mais presentes na borda da \texttt{baboon.png}. Essa é a região onde mais se percebe diferenças visuais na \cref{fig:dist:baboon}.
 
 \begin{figure}[H]
     \centering
     \input{figuras/peppers}
-    \caption{Aplicação das 6 distribuições de erro na \cref{fig:peppers:orig}.}
+    \caption{Aplicação das distribuições de erro na \cref{fig:peppers:orig}.}
+    \label{fig:dist:peppers}
 \end{figure}
 
 \begin{figure}[H]
     \centering
     \input{figuras/monalisa}
-    \caption{Aplicação das 6 distribuições de erro na \cref{fig:monalisa:orig}.}
+    \caption{Aplicação das distribuições de erro na \cref{fig:monalisa:orig}.}
+    \label{fig:dist:monalisa}
 \end{figure}
 
 \begin{figure}[H]
     \centering
     \input{figuras/watch}
-    \caption{Aplicação das 6 distribuições de erro na \cref{fig:watch:orig}.}
+    \caption{Aplicação das distribuições de erro na \cref{fig:watch:orig}.}
+    \label{fig:dist:watch}
 \end{figure}
 
 \begin{table}[H]
