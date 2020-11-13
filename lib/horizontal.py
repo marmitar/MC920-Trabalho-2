@@ -43,7 +43,7 @@ def varredura_unidirecional(img: Image, dist: ErrorDist) -> Image:
     # aplicação em cada pixel
     for y in range(H):
         for x in range(W):
-            # meio ton simples
+            # meios tons simples
             intensidade = img[y, x]
             if intensidade < 128.0:
                 res[y, x] = 0
