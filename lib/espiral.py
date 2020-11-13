@@ -10,7 +10,7 @@ from .direcao import ErrorDistDir, Dir, deslocamento
 from .nb import jit
 
 
-@jit("void(uint8[:,::1], float32[:,::1], float32[:,::1], uint32, UniTuple(uint32, 4))")
+@jit("void(uint8[:,::1], float32[:,::1], float32[:,::1], uint8, UniTuple(int32, 4))")
 def aplica_em_pixel(res: Image, img: Image, dist: ErrorDist, d: int, pos: Tuple[int, int, int, int]) -> None:
     """
     Aplicação da redução de níveis de cinza e distribuição dos erros.
@@ -30,7 +30,8 @@ def aplica_em_pixel(res: Image, img: Image, dist: ErrorDist, d: int, pos: Tuple[
         Informações de dimensões da imagem e ponto atual.
     """
     # dimensões da img e ponto atual
-    H, W, x, y = pos
+    H, W, y, x = pos
+
     # dim. da distribuição
     tH, tW = dist.shape
     # deslocamento da máscara para essa direção

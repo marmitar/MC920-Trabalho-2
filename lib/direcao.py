@@ -67,7 +67,7 @@ def err_dist_direcoes(dist: ErrorDist) -> ErrorDistDir:
     return direita, esquerda, cima, baixo
 
 
-@jit("UniTuple(uint32, 2)(uint32, uint32, uint32)")
+@jit("UniTuple(uint32, 2)(uint8, uint32, uint32)")
 def deslocamento(dir: int, H: int, W: int):
     """
     Deslocamento da distribuição de erro naquela direção.
