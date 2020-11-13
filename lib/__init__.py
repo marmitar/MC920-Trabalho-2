@@ -1,8 +1,9 @@
 """
 Operação de pontilhado e modos de varredura.
 """
-from tipos import Image, ErrorDist
+from typing import Optional
 from enum import IntEnum, unique
+from tipos import Image, ErrorDist
 import numpy as np
 
 from .nb import jit, prange, USANDO_NUMBA
@@ -61,7 +62,7 @@ class Varredura(IntEnum):
 # # # # # # # # # # # # # # #
 # Aplicação dos meios-tons  #
 
-def meios_tons(img: Image, dist: ErrorDist, varredura=Varredura) -> Image:
+def meios_tons(img: Image, dist: Optional[ErrorDist]=None, varredura=Varredura) -> Image:
     """
     Aplicação da técnica de meios-tons seguindo uma distribuição e um padrão
     de varredura.
@@ -82,7 +83,9 @@ def meios_tons(img: Image, dist: ErrorDist, varredura=Varredura) -> Image:
     out: np.ndarray
         Imagem resultante do pontilhado.
     """
-    if img.ndim == 3:
+    if dist is None:
+        return np.where(img < 128, 0, 1).astype(np.uint8)
+    elif img.ndim == 3:
         # aplicação em imagens RGB
         return meios_tons_colorida(img, dist, varredura.value)
     else:
@@ -140,4 +143,3 @@ def meios_tons_colorida(img: Image, dist: ErrorDist, varredura: int) -> Image:
         res[..., ch] = ans
 
     return res
-
