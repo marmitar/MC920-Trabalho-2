@@ -12,11 +12,11 @@ Além das bibliotecas padrão de Python, foram utilizados os pacotes NumPy \auto
         \item[lib] Pacote interno com as operações de pontilhado.
 
         \begin{description}
-            \item[lib/\_\_init\_\_.py] Função geral de aplicação do pontilhado em imagens coloridas e em escala de cinza, com as opções de varredura.
+            \item[lib/\_\_init\_\_.py] Funções gerais de aplicação do pontilhado em imagens coloridas e em escala de cinza, com as opções de varredura.
 
-            \item[lib/nb.py] Mock up do decorador \mintinline{python3}{@numba.jit} \autocite{ref:numbajit}, para que a ferramenta funcione tanto com ou sem a biblioteca Numba.
+            \item[lib/nb.py] Mock up do decorador \mintinline{python3}{@numba.jit} \autocite{ref:numbajit}, para que a ferramenta funcione com ou sem a biblioteca Numba.
 
-            \item[lib/horizontal.py] Implementação das varreduras horizontais, tanto a varredura unidirecional quanto a alternada.
+            \item[lib/horizontal.py] Implementação das varreduras horizontais: varredura unidirecional e a alternada.
 
             \item[lib/direcao.py] Controle de direção para varreduras não horizontais (espiral e curvas de Hilbert).
 
@@ -48,7 +48,7 @@ Além das bibliotecas padrão de Python, foram utilizados os pacotes NumPy \auto
 
     Os argumentos opicionais podem ser vistos com \mintinline{bash}{$ python3 main.py --help}. A mais importante das opções é \mintinline{text}{--output}, ou \mintinline{text}{-o}, que salva o resultado em um arquivo PNG em vez de exibir na tela. Se é desejável tanto a exibição da imagem quanto o salvamento no arquivo, o argumento \mintinline{text}{--force-show} ou \mintinline{text}{-f} pode ser usado. Também existe a opção \mintinline{bash}{--grayscale} ou \mintinline{bash}{-g} que faz o processamento em escala de cinza.
 
-    As outras opções são referentes à técnica de pontilhado. A flag \mintinline{bash}{--varedura} ou \mintinline{bash}{-v} controla o forma de varrredura na image, como descrito na \ref{sec:varredura}. A distribuição de erros aplicada pode ser modificada com \mintinline{bash}{--destribuicao} ou \mintinline{bash}{-d} e aceita o nome de qualquer um de seus idealizadores.
+    As outras opções são referentes à técnica de pontilhado. A flag \mintinline{bash}{--varredura} ou \mintinline{bash}{-v} controla a forma de varrredura na imagem, como descrito na \cref{sec:varredura}. A distribuição de erros aplicada pode ser modificada com \mintinline{bash}{--destribuicao} ou \mintinline{bash}{-d} e aceita o nome de qualquer um dos idealizadores da distribuição.
 
     Por exemplo, o comando abaixo apresenta a \cref{fig:execucao} em uma nova janela gráfica.
 
@@ -58,4 +58,4 @@ Além das bibliotecas padrão de Python, foram utilizados os pacotes NumPy \auto
 
 \subsection{A biblioteca Numba}
 
-    A ferramenta foi desenvolvida com requerimento mínimo sendo apenas o NumPy. No entanto, se presente, a biblioteca Numba causa um grande diferencial no tempo de execução das técnicas de pontilhado (mais de trinta vezes mais rápido, na máquina de desenvolvimento). Por isso, ela é fortemente recomendada na execução do código.
+    A ferramenta foi desenvolvida com requerimento mínimo sendo apenas o NumPy. No entanto, se presente, a biblioteca Numba causa um grande diferencial no tempo de execução das técnicas de pontilhado (cerca de trinta vezes mais rápido na máquina de desenvolvimento). Por isso, a biblioteca é fortemente recomendada na execução do código.
