@@ -74,28 +74,31 @@ def varredura_espiral(img: Image, dists: ErrorDistDir) -> Image:
     out: np.ndarray
         Imagem resultante. Matriz 2D com `uint8` em ordem row-major.
     """
+    # dimensões da imagem
     H, W = img.shape
-
+    # imagem em ponto flutuante
     img = img.astype(np.float32)
+    # imagem resultante
     res = np.empty((H, W), dtype=np.uint8)
 
+    # cada espiral, de fora para dentro
     for s in range((1 + min(H, W)) // 2):
-
+        # linha superior
         y = s
         d = Dir.direita.value
         for x in range(s, W - s):
             aplica_em_pixel(res, img, dists[d], d, (H, W, y, x))
-
+        # linha lateral direita
         x = W - 1 - s
         d = Dir.baixo.value
         for y in range(s + 1, H - s):
             aplica_em_pixel(res, img, dists[d], d, (H, W, y, x))
-
+        # linha inferior
         y = H - 1 - s
         d = Dir.esquerda.value
         for x in range(W - 1 - s, s, -1):
             aplica_em_pixel(res, img, dists[d], d, (H, W, y, x - 1))
-
+        # linha lateral esquerda
         x = s
         d = Dir.cima.value
         for y in range(H - 1 - s, s + 1, -1):
