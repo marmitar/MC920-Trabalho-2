@@ -10,6 +10,8 @@
 
 \subsection{Formas de Varredura} \label{sec:varredura}
 
+    A técnica de pontilhado com distribuição de erros altera a imagem enquanto é aplicada, o que faz com que o caminho escolhido altere o resultado. Por isso, o pontilhado foi implementado seguindo quatro formas de varredura, apresentadas na \cref{fig:varredura}. Apesar disso, as varreduras que serão mais discutidas aqui serão a unidirecional (\ref{fig:varredura:unidirecional}) e a alternada (\ref{fig:varredura:alternada}).
+
     \begin{figure}[H]
         \centering
         \input{figuras/varredura}
@@ -18,33 +20,9 @@
         \label{fig:varredura}
     \end{figure}
 
-    \begin{figure}
-        \centering
-        \input{figuras/dists}
-    \end{figure}
+    Para a verrudura alternada, a distribuição é aplicada em duas orientações, normal e invertida horizontalmente, enquanto para as curvas em espiral e de Hilbert a distribuição dois considerada em quatro orientações, seguindo rotações sucessivas de 90\textdegree na matriz.
 
-%     \input{textos/impl/codigo}
-
-% \subsection{Tratamento de Bordas}
-
-%     Para que a convolução possa ser feita nas bordas da imagem, existem vários modos de tratamento. Na ferramenta foram implementadas três formas de dentre as várias possíveis: a extensão do último pixel (\ref{fig:borda:extensao}), a reflexão dos pixels de borda (\ref{fig:borda:reflexao}) e a mesma reflexão, mas sem repetir o pixel mais externo (\ref{fig:borda:reflexao-pulada}).
-
-%     A \textit{flag} \mintinline{bash}{--borda}, ou \mintinline{bash}{-b}, serve para controlar o tratamento de borda. As opções devem ser passadas como aparecem na \cref{fig:borda}. Por padrão, o tratamento é feito como na \cref{fig:borda:reflexao-pulada}, como se fosse a opção \mintinline{bash}{-b reflexao_pula_ultimo}. Ambos \textit{backends}, SciPy e OpenCV, funcionam com os três tipos de bordas.
-
-%     Apesar de interessante, e em alguns casos importante, o três tratamentos de bordas não alteram muito no resultado da convolução. A razão disso é que os \textit{kernels} desse trabalho são relativamente pequenos.
-
-% \subsection{Discretização} \label{sec:impl:t}
-
-%     Toda o processo de convolução é feito com operações de ponto flutuante, buscando evitar \textit{overflow} e problemas de arredondamento. Então, para que a matriz volte a representar uma imagem, é preciso discretizar os valores, para os níveis 0 a 255.
-
-%     A forma mais comum é arrendondando os valores para os inteiros mais próximos no intervalo $[0, 255]$. Dessa forma, os valores negativos se tornam 0 e valores maiores que 255 vão para 255. No código, esse método foi implementado na função \pyline{lib.trunca}. Essa é a opção padrão do programa.
-
-%     Uma forma alternativa também foi implementada, baseada no mapeamento linear do menor valor da imagem para 0 e do maior para 255. Na ferramenta em Python, esse método de discretização está implementado na função \pyline{lib.transforma_limites} e pode ser selecionada com a opção \mintinline{bash}{-t} na linha de comando. Essa opção não foi muito utilizada neste relatório.
-
-% \subsection{Combinação das Imagens} \label{sec:impl:n}
-
-%     Vários filtros podem ser passados como argumento, como no exemplo da \cref{sec:execucao}. Os filtros são aplicados, um por vez, na mesma imagem de entrada, discretizados e só então combinados em uma imagem final. A combinação é feita pela raiz da soma quadrática, em ponto flutuante, e discretizada novamente.
-
-%     Para padronizar a implementação, a etapa de combinação é feita mesmo com apenas uma imagem. Por causa disso, a discretização é feita antes e depois da combinação, mantendo o resultado esperado da convolução. No entanto, isso pode ser alterado com a opção \mintinline{bash}{-n}, fazendo com que a discretização seja aplicada apenas no final.
-
-%     Para um filtro apenas, isso faz com que a convolução seja tratada pelo valor absoluto, fazendo as imagens ficarem com regiões mais claras, onde anteriormente seria preto. Esse modo não foi utilizado neste relatório.
+    % \begin{figure}
+    %     \centering
+    %     \input{figuras/dists}
+    % \end{figure}
