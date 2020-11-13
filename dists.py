@@ -3,7 +3,6 @@ Definição das ditribuições de erro para o trabalho 2.
 """
 from typing import Dict, List
 from tipos import ErrorDist
-from typing import Optional
 import numpy as np
 
 
@@ -11,9 +10,7 @@ import numpy as np
 # Acesso por nome #
 
 # Dicinário para acesso por nome.
-ERR_DIST: Dict[str, Optional[ErrorDist]] = {
-    'NONE': None
-}
+ERR_DIST: Dict[str, ErrorDist] = {}
 
 
 def distribuicao(nome: str, total: int, data: List[List[int]]) -> None:

@@ -1,5 +1,4 @@
 import sys, cv2, warnings
-from typing import Optional
 from argparse import ArgumentParser, ArgumentTypeError
 
 from inout import imgread, imgwrite, imgshow
@@ -28,7 +27,7 @@ if not USANDO_NUMBA:
 # # # # # # # # # # # # # # #
 # Tratamento dos argumentos #
 
-def dist_err(nome: str) -> Optional[ErrorDist]:
+def dist_err(nome: str) -> ErrorDist:
     """
     Recuperação das distribuições de erro pré-definidas.
     """
