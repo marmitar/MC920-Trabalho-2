@@ -27,16 +27,17 @@ def jaccard(f, g):
     return np.count_nonzero(f == g) / f.size
 
 
-DIFS = [RMSE, SNR, PSNR, cov, corr, jaccard]
+DIFS = [RMSE, SNR, PSNR, corr, cov, jaccard]
 
 
 _, img, dist, varredura = sys.argv
 
 f = cv2.imread(f'imagens/{img}.png')
-g = cv2.imread(f'build/{varredura}/{dist}_{img}.png')
+g = cv2.imread(f'build/{varredura}/{dist}/{img}.png')
 
 if f is None or g is None:
     raise ValueError(f'não foi possível ler imagens', (img, dist, varredura))
 
 for fun in DIFS:
-    print(fun.__name__, fun(f, g))
+    name = fun.__name__
+    print(f'\t{name:>8s} {fun(f, g):9.3f}')
