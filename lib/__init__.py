@@ -65,17 +65,18 @@ class Varredura(IntEnum):
 def meios_tons(img: Image, dist: Optional[ErrorDist]=None, varredura=Varredura) -> Image:
     """
     Aplicação da técnica de meios-tons seguindo uma distribuição e um padrão
-    de varredura.
+    de varredura. Quando a distribuição não é dada, faz a conversão de meios-
+    -tons simples.
 
     Parâmetros
     ----------
     img: np.ndarray
         Matriz de 2 (em escalas de cinza) ou 3 (com canais RGB) dimensões que
         representa a imagem.
-    dist: np.ndarray
+    dist: np.ndarray, opcional
         Matriz com as distribuições de erro à serem aplicadas. Assume largura
         ímpar, iniciando a aplicação na posição intermediária da primeira linha.
-    varredura: Varredura
+    varredura: Varredura, opcional
         Ordem de aplicação na imagem.
 
     Retorno
@@ -84,6 +85,7 @@ def meios_tons(img: Image, dist: Optional[ErrorDist]=None, varredura=Varredura) 
         Imagem resultante do pontilhado.
     """
     if dist is None:
+        # sem distribuição de erro, conversão simples
         return np.where(img < 128, 0, 1).astype(np.uint8)
     elif img.ndim == 3:
         # aplicação em imagens RGB

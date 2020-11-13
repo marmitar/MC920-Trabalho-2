@@ -1,6 +1,8 @@
 """
 Direções locais de aplicação das distribuições e
 rotações das matrizes das distribuições de erros.
+Para as varreduras em curvas de Hilbert e em
+espiral.
 """
 from enum import IntEnum, unique
 from typing import Tuple
@@ -63,3 +65,40 @@ def err_dist_direcoes(dist: ErrorDist) -> ErrorDistDir:
 
     # posições de acordo com `Dir`
     return direita, esquerda, cima, baixo
+
+
+@jit("UniTuple(uint32, 2)(uint32, uint32, uint32)")
+def deslocamento(dir: int, H: int, W: int):
+    """
+    Deslocamento da distribuição de erro naquela direção.
+
+    Parâmetros
+    ----------
+    dir: int
+        Direção da distribuição de erros.
+    H: int
+        Altura da máscara de distribuição de erros.
+    W: int
+        Largura da máscara de distribuição de erros.
+
+    Retorno
+    -------
+    out: tuple
+        Tupla com as quatro rotações da matriz, seguindo as direções.
+    """
+    # ponto intermediário em dimensão ímpar
+    def meio(x):
+        return (x - 1) // 2
+
+    if dir == Dir.direita:
+        # máscara normal: linha sup. no meio
+        return 0, meio(W)
+    elif dir == Dir.esquerda:
+        # máscara flipada: linha inf. no meio
+        return H-1, meio(W)
+    elif dir == Dir.cima:
+        # máscara p/ cima: primeira col. no meio
+        return meio(H), 0
+    else:
+        # máscara p/ baixo: última col. no meio
+        return meio(H), W-1
