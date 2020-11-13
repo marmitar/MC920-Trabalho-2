@@ -69,6 +69,24 @@ def varredura_unidirecional(img: Image, dist: ErrorDist) -> Image:
 
 @jit("uint8[:,::1](uint8[:,::1], float32[:,::1])")
 def varredura_alternada(img: Image, dist: ErrorDist) -> Image:
+    """
+    Varredura pela imagem alterando a direção nas linhas pares e ímpares,
+    reduzindo os níveis de cinza e redistribuindo os erros em relação a
+    imagem original.
+
+    Parâmetros
+    ----------
+    img: np.ndarray
+        Matriz 2D com `uint8` em ordem row-major, representando a imagem.
+    dist: np.ndarray
+        Matriz 2D com `float32` em ordem row-major, representando a
+        distribuição de erros que deve ser feita.
+
+    Retorno
+    -------
+    out: np.ndarray
+        Imagem resultante. Matriz 2D com `uint8` em ordem row-major.
+    """
     # dimensões da imagem
     H, W = img.shape
     # dimensões da distribuição de erros
