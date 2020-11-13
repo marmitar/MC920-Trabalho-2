@@ -60,7 +60,7 @@ def imgwrite(img: Image, arquivo: str) -> None:
         raise ValueError(msg)
 
 
-def imgshow(img: Image, nome: str="") -> None:
+def imgshow(img: Image, nome: str="", delay: int=250) -> None:
     """
     Apresenta a imagem em uma janela com um nome.
 
@@ -73,7 +73,13 @@ def imgshow(img: Image, nome: str="") -> None:
     """
     try:
         cv2.imshow(nome, img)
-        cv2.waitKey()
+
+        # espera alguma chave ou a janela ser fechada
+        while cv2.waitKey(delay) < 0:
+            if cv2.getWindowProperty(nome, cv2.WND_PROP_VISIBLE) <= 0:
+                break
+        cv2.destroyAllWindows()
+        cv2.waitKey(1)
     # Ctrl-C não são erros nesse caso
     except KeyboardInterrupt:
         pass
