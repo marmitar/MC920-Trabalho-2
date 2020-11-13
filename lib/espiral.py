@@ -1,16 +1,42 @@
+"""
+Varredura seguindo uma espiral retangular.
+Não funciona corretamente.
+"""
 from tipos import Image, ErrorDist
 from typing import Tuple
 import numpy as np
 
-from .direcao import ErrorDistDir, Dir
+from .direcao import ErrorDistDir, Dir, deslocamento
 from .nb import jit
 
 
-@jit("void(uint8[:,::1], float32[:,::1], float32[:,::1], uint32, uint32, uint32, uint32)")
-def aplica_varredura(res: Image, img: Image, dist: ErrorDist, H: int, W: int, y: int, x: int) -> None:
-    tH, tW = dist.shape
-    dW = (tW - 1) // 2
+@jit("void(uint8[:,::1], float32[:,::1], float32[:,::1], uint32, UniTuple(uint32, 4))")
+def aplica_em_pixel(res: Image, img: Image, dist: ErrorDist, d: int, pos: Tuple[int, int, int, int]) -> None:
+    """
+    Aplicação da redução de níveis de cinza e distribuição dos erros.
+    Função interna.
 
+    Parâmetros
+    ----------
+    res: np.ndarray
+        Imagem resultante
+    img: np.ndarray
+        Imagem original, onde serão distribuídos os erros.
+    dist: np.ndarray
+        Distribuição de erros naquela direção.
+    d: int
+        Direção, de acordo com a enum ``Dir``.
+    pos: tuple
+        Informações de dimensões da imagem e ponto atual.
+    """
+    # dimensões da img e ponto atual
+    H, W, x, y = pos
+    # dim. da distribuição
+    tH, tW = dist.shape
+    # deslocamento da máscara para essa direção
+    dH, dW = deslocamento(d, tH, tW)
+
+    # meios tons simples
     intensidade = img[y, x]
     if intensidade < 128.0:
         res[y, x] = 0
@@ -20,17 +46,34 @@ def aplica_varredura(res: Image, img: Image, dist: ErrorDist, H: int, W: int, y:
         valor = 255.0
 
     erro = intensidade - valor
-
+    # carregamento do erro seguindo aquela direção
     for i in range(tH):
-        yi = y + i
+        yi = y + i - dH
         for j in range(tW):
             xj = x + j - dW
+            # cuidado com acesso out-of-bounds
             if 0 <= yi < H and 0 <= xj < W:
                 img[yi, xj] += dist[i, j] * erro
 
 
 @jit("uint8[:,::1](uint8[:,::1], UniTuple(float32[:,::1], 4))")
 def varredura_espiral(img: Image, dists: ErrorDistDir) -> Image:
+    """
+    Varredura pela seguindo uma espiral retangular.
+
+    Parâmetros
+    ----------
+    img: np.ndarray
+        Matriz 2D com `uint8` em ordem row-major, representando a imagem.
+    dists: tuple
+        Quatro (4) matrizes 2D com `float32` em ordem row-major, com as
+        distribuições de erros para cada direção de aplicação.
+
+    Retorno
+    -------
+    out: np.ndarray
+        Imagem resultante. Matriz 2D com `uint8` em ordem row-major.
+    """
     H, W = img.shape
 
     img = img.astype(np.float32)
@@ -41,21 +84,21 @@ def varredura_espiral(img: Image, dists: ErrorDistDir) -> Image:
         y = s
         d = Dir.direita.value
         for x in range(s, W - s):
-            aplica_varredura(res, img, dists[d], H, W, y, x)
+            aplica_em_pixel(res, img, dists[d], d, (H, W, y, x))
 
         x = W - 1 - s
         d = Dir.baixo.value
         for y in range(s + 1, H - s):
-            aplica_varredura(res, img, dists[d], H, W, y, x)
+            aplica_em_pixel(res, img, dists[d], d, (H, W, y, x))
 
         y = H - 1 - s
         d = Dir.esquerda.value
         for x in range(W - 1 - s, s, -1):
-            aplica_varredura(res, img, dists[d], H, W, y, x - 1)
+            aplica_em_pixel(res, img, dists[d], d, (H, W, y, x - 1))
 
         x = s
         d = Dir.cima.value
         for y in range(H - 1 - s, s + 1, -1):
-            aplica_varredura(res, img, dists[d], H, W, y - 1, x)
+            aplica_em_pixel(res, img, dists[d], d, (H, W, y - 1, x))
 
     return res
