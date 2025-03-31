@@ -1,3 +1,3 @@
 # Trabalho 2
 
-[Entrega](Documento.pdf)
+[Enunciado](papers/enunciado.pdf) e [entrega](papers/entrega.pdf).
